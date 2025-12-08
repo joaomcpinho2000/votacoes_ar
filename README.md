@@ -28,7 +28,7 @@ The container will expect these env vars (same names used by the script).
 1. Build the image (ensure ARM64 platform):
 ```bash
 docker build --platform linux/arm64 -t votacoes_ar:latest .
-
+```
 ```bash
 docker run -d voting_job:voting
 ```
