@@ -1,4 +1,5 @@
 import requests
+import requests
 from bs4 import BeautifulSoup
 import smtplib
 import os
@@ -7,6 +8,9 @@ from email.mime.base import MIMEBase
 from email import encoders
 from datetime import datetime
 import smtplib
+from dotenv import load_dotenv
+
+load_dotenv()
 
 current_day = datetime.now().day
 current_month = datetime.now().month
@@ -15,9 +19,9 @@ current_year = datetime.now().year
 LAST_URL_FILE = "last_url.txt"
 SMTP_SERVER = "smtp.sapo.pt"
 SMTP_PORT = 587
-EMAIL_SENDER = "${EMAIL_SENDER}"
-EMAIL_PASSWORD = "${EMAIL_PASSWORD}"
-EMAIL_RECEIVER = ["${EMAIL_RECEIVER}"]
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
 SUBJECT = f"Votações AR - {current_day}/{current_month}/{current_year}"
 BODY = "Attached is the latest voting results PDF."
 
