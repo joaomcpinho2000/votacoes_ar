@@ -21,7 +21,10 @@ SMTP_SERVER = "smtp.sapo.pt"
 SMTP_PORT = 587
 EMAIL_SENDER = os.getenv("EMAIL_SENDER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
+
+receiver_raw = os.getenv("EMAIL_RECEIVER", "")
+EMAIL_RECEIVER = [e.strip() for e in receiver_raw.split(",") if e.strip()]
+
 SUBJECT = f"Votações AR - {current_day}/{current_month}/{current_year}"
 BODY = "Attached is the latest voting results PDF."
 
