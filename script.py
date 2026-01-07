@@ -1,5 +1,4 @@
 import requests
-import requests
 from bs4 import BeautifulSoup
 import smtplib
 import os
@@ -29,14 +28,19 @@ SUBJECT = f"Votações AR - {current_day}/{current_month}/{current_year}"
 BODY = "Attached is the latest voting results PDF."
 
 def load_last_url():
-    if os.path.exists(LAST_URL_FILE):
-        with open(LAST_URL_FILE, "r") as f:
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, LAST_URL_FILE)
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
             return f.read().strip()
     return None
 
-def save_last_url(url):
-    with open(LAST_URL_FILE, "w") as f:
-        f.write(url)
+def save_last_url(file_name):
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, LAST_URL_FILE)
+    print(f"Saving last URL to {file_name} in {file_path}")
+    with open(file_path, "w") as f:
+        f.write(file_name)
 
 def get_latest_pdf_url():
     url = "https://www.parlamento.pt/ArquivoDocumentacao/Paginas/Arquivodevotacoes.aspx"
@@ -55,6 +59,12 @@ def get_latest_pdf_url():
     if pdf_link:
         return pdf_link['href']
     return None
+
+def strip_file_name(file_name):
+    try:
+        return file_name.split("Fich=")[1].split(".pdf")[0]
+    except (IndexError, AttributeError):
+        return file_name
 
 def download_pdf(pdf_url, save_path):
     response = requests.get(pdf_url, stream=True)
@@ -96,7 +106,13 @@ def main():
 
     # NEW — Do not process if URL is the same
     last_url = load_last_url()
-    if last_url == pdf_url:
+    current_pdf_name = strip_file_name(pdf_url)
+    last_pdf_name = strip_file_name(last_url)
+    print(f"Current PDF name: {current_pdf_name}")
+    print(f"Last PDF name: {last_pdf_name}")
+    save_last_url(current_pdf_name)
+
+    if current_pdf_name == last_pdf_name:
         print("Same PDF URL as yesterday. Skipping download and email.")
         return
 
@@ -113,10 +129,7 @@ def main():
             SUBJECT,
             BODY,
             pdf_filename
-        )
-
-        # NEW — Save today's URL
-        save_last_url(pdf_url)
+        )        
 
         os.remove(pdf_filename)
 
