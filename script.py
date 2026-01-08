@@ -15,6 +15,7 @@ current_day = datetime.now().day
 current_month = datetime.now().month
 current_year = datetime.now().year
 
+BASE_PATH = "/"
 LAST_URL_FILE = "last_url.txt"
 SMTP_SERVER = "smtp.sapo.pt"
 SMTP_PORT = 587
@@ -28,16 +29,14 @@ SUBJECT = f"Votações AR - {current_day}/{current_month}/{current_year}"
 BODY = "Attached is the latest voting results PDF."
 
 def load_last_url():
-    current_dir = os.getcwd()
-    file_path = os.path.join(current_dir, LAST_URL_FILE)
+    file_path = os.path.join(BASE_PATH, LAST_URL_FILE)
     if os.path.exists(file_path):
         with open(file_path, "r") as f:
             return f.read().strip()
     return None
 
 def save_last_url(file_name):
-    current_dir = os.getcwd()
-    file_path = os.path.join(current_dir, LAST_URL_FILE)
+    file_path = os.path.join(BASE_PATH, LAST_URL_FILE)
     print(f"Saving last URL to {file_name} in {file_path}")
     with open(file_path, "w") as f:
         f.write(file_name)
