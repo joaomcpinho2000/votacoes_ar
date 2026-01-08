@@ -110,12 +110,13 @@ def main():
     last_pdf_name = strip_file_name(last_url)
     print(f"Current PDF name: {current_pdf_name}")
     print(f"Last PDF name: {last_pdf_name}")
-    save_last_url(current_pdf_name)
 
     if current_pdf_name == last_pdf_name:
         print("Same PDF URL as yesterday. Skipping download and email.")
+        save_last_url(current_pdf_name)
         return
 
+    save_last_url(current_pdf_name)
     pdf_filename = "latest_voting_results.pdf"
     downloaded = download_pdf(pdf_url, pdf_filename)
 
